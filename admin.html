@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RSVP Dashboard — Rachel &amp; Chris Bruce — Wedding Invitation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Great+Vibes&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold:       #C9A84C;
+      --gold-light: #E8D5A3;
+      --gold-bright:#F0C040;
+      --gold-dark:  #8B6914;
+      --ivory:      #FAF7F2;
+      --charcoal:   #1a1a1a;
+      --dark:       #111111;
+    }
+
+    @keyframes shimmer {
+      0%   { background-position: -200% center; }
+      100% { background-position: 200% center; }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .gold-text {
+      background: linear-gradient(90deg, var(--gold-dark) 0%, var(--gold) 30%, var(--gold-bright) 50%, var(--gold) 70%, var(--gold-dark) 100%);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: shimmer 4s linear infinite;
+    }
+
+    body {
+      background: var(--dark);
+      font-family: 'Cormorant Garamond', serif;
+      color: var(--ivory);
+      min-height: 100vh;
+      padding: 0 0 60px;
+    }
+
+    /* Header */
+    .dash-header {
+      background: var(--charcoal);
+      border-bottom: 1px solid rgba(201,168,76,0.3);
+      padding: 32px 40px;
+      text-align: center;
+      position: relative;
+    }
+    .dash-header::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      height: 2px;
+      background: linear-gradient(to right, transparent, var(--gold), transparent);
+    }
+    .dash-monogram {
+      font-family: 'Great Vibes', cursive;
+      font-size: 2.2rem;
+      display: block;
+      margin-bottom: 4px;
+    }
+    .dash-title {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 300;
+      font-size: 0.6rem;
+      letter-spacing: 0.45em;
+      text-transform: uppercase;
+      color: rgba(232,213,163,0.6);
+    }
+
+    /* Main content */
+    .dash-content {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 24px 0;
+      animation: fadeIn 0.8s ease both;
+    }
+
+    /* Stats row */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 36px;
+    }
+    .stat-card {
+      background: var(--charcoal);
+      border: 1px solid rgba(201,168,76,0.25);
+      padding: 24px 16px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, rgba(201,168,76,0.06) 0%, transparent 70%);
+    }
+    .stat-number {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.8rem;
+      font-weight: 300;
+      line-height: 1;
+      display: block;
+      margin-bottom: 8px;
+      position: relative;
+    }
+    .stat-label {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 300;
+      font-size: 0.55rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: rgba(232,213,163,0.55);
+      position: relative;
+    }
+
+    /* Gold divider */
+    .gold-divider {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin: 0 0 28px;
+    }
+    .gold-divider .line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(201,168,76,0.4), transparent);
+    }
+    .gold-divider .label {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 300;
+      font-size: 0.58rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--gold);
+      white-space: nowrap;
+    }
+
+    /* Filter tabs */
+    .filter-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .tab-btn {
+      background: transparent;
+      border: 1px solid rgba(201,168,76,0.3);
+      color: rgba(232,213,163,0.6);
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 300;
+      font-size: 0.58rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      padding: 8px 18px;
+      cursor: pointer;
+      transition: all 0.25s;
+    }
+    .tab-btn.active, .tab-btn:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+      background: rgba(201,168,76,0.07);
+    }
+
+    /* RSVP list */
+    .rsvp-list { display: flex; flex-direction: column; gap: 10px; }
+
+    .rsvp-row {
+      background: var(--charcoal);
+      border: 1px solid rgba(201,168,76,0.18);
+      padding: 18px 22px;
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      align-items: center;
+      gap: 16px;
+      transition: border-color 0.25s;
+    }
+    .rsvp-row:hover { border-color: rgba(201,168,76,0.4); }
+
+    .rsvp-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem;
+      font-weight: 400;
+      color: var(--ivory);
+    }
+    .rsvp-meta {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 200;
+      font-size: 0.55rem;
+      letter-spacing: 0.2em;
+      color: rgba(250,247,242,0.35);
+      margin-top: 4px;
+    }
+    .rsvp-notes {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 0.88rem;
+      color: rgba(250,247,242,0.45);
+      margin-top: 3px;
+    }
+
+    .rsvp-guests {
+      text-align: center;
+    }
+    .rsvp-guests .count {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      font-weight: 300;
+      color: var(--gold-light);
+      display: block;
+      line-height: 1;
+    }
+    .rsvp-guests .count-label {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 200;
+      font-size: 0.5rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(201,168,76,0.45);
+    }
+
+    .rsvp-badge {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 300;
+      font-size: 0.55rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border: 1px solid;
+    }
+    .rsvp-badge.accepts {
+      color: #a8d5a2;
+      border-color: rgba(168,213,162,0.4);
+      background: rgba(168,213,162,0.06);
+    }
+    .rsvp-badge.declines {
+      color: rgba(250,247,242,0.4);
+      border-color: rgba(250,247,242,0.15);
+    }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      padding: 60px 24px;
+      color: rgba(250,247,242,0.3);
+    }
+    .empty-state .empty-icon {
+      font-family: 'Great Vibes', cursive;
+      font-size: 3rem;
+      color: rgba(201,168,76,0.3);
+      display: block;
+      margin-bottom: 12px;
+    }
+    .empty-state p {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 200;
+      font-size: 0.62rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+    }
+
+    /* Refresh btn */
+    .refresh-btn {
+      background: transparent;
+      border: 1px solid rgba(201,168,76,0.35);
+      color: rgba(201,168,76,0.7);
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 300;
+      font-size: 0.58rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      padding: 10px 20px;
+      cursor: pointer;
+      transition: all 0.25s;
+      margin-bottom: 28px;
+    }
+    .refresh-btn:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    /* Export CSV btn */
+    .export-btn {
+      background: var(--gold);
+      border: none;
+      color: var(--charcoal);
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 400;
+      font-size: 0.58rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      padding: 10px 20px;
+      cursor: pointer;
+      transition: all 0.25s;
+      margin-bottom: 28px;
+      margin-left: 8px;
+    }
+    .export-btn:hover { background: var(--gold-bright); }
+
+    /* Loading */
+    .loading {
+      text-align: center;
+      padding: 40px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 200;
+      font-size: 0.6rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: rgba(201,168,76,0.5);
+    }
+
+    @media (max-width: 600px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .rsvp-row { grid-template-columns: 1fr; gap: 8px; }
+      .dash-header { padding: 24px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="dash-header">
+  <span class="dash-monogram gold-text">R &amp; C</span>
+  <p class="dash-title">RSVP Dashboard &nbsp;·&nbsp; Rachel &amp; Chris Bruce &nbsp;·&nbsp; October 17, 2026</p>
+</div>
+
+<div class="dash-content">
+
+  <!-- Stats -->
+  <div class="stats-grid" id="stats-grid">
+    <div class="stat-card">
+      <span class="stat-number gold-text" id="stat-total">—</span>
+      <span class="stat-label">Total Responses</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-number" style="color:#a8d5a2;" id="stat-accepting">—</span>
+      <span class="stat-label">Attending</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-number" style="color:rgba(250,247,242,0.4);" id="stat-declining">—</span>
+      <span class="stat-label">Declining</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-number gold-text" id="stat-guests">—</span>
+      <span class="stat-label">Total Guests</span>
+    </div>
+  </div>
+
+  <!-- Controls -->
+  <div style="display:flex; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:20px;">
+    <div class="filter-tabs">
+      <button class="tab-btn active" onclick="filterRsvps('all', this)">All</button>
+      <button class="tab-btn" onclick="filterRsvps('accepts', this)">Attending</button>
+      <button class="tab-btn" onclick="filterRsvps('declines', this)">Declining</button>
+    </div>
+    <button class="refresh-btn" onclick="loadData()">↻ Refresh</button>
+    <button class="export-btn" onclick="exportCSV()">↓ Export CSV</button>
+  </div>
+
+  <div class="gold-divider">
+    <div class="line"></div>
+    <span class="label">Guest List</span>
+    <div class="line"></div>
+  </div>
+
+  <div id="rsvp-list" class="rsvp-list">
+    <div class="loading">Loading responses…</div>
+  </div>
+
+</div>
+
+<script>
+  let allRsvps = [];
+  let currentFilter = 'all';
+
+  async function loadData() {
+    try {
+      const res = await fetch('/api/rsvps');
+      const data = await res.json();
+      allRsvps = data.rsvps || [];
+
+      // Update stats
+      document.getElementById('stat-total').textContent = data.total_responses;
+      document.getElementById('stat-accepting').textContent = data.accepting;
+      document.getElementById('stat-declining').textContent = data.declining;
+      document.getElementById('stat-guests').textContent = data.total_guests;
+
+      renderList(currentFilter);
+    } catch (err) {
+      document.getElementById('rsvp-list').innerHTML =
+        '<div class="empty-state"><span class="empty-icon">✦</span><p>Could not connect to server</p></div>';
+    }
+  }
+
+  function filterRsvps(filter, btn) {
+    currentFilter = filter;
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderList(filter);
+  }
+
+  function renderList(filter) {
+    const list = document.getElementById('rsvp-list');
+    const filtered = filter === 'all' ? allRsvps : allRsvps.filter(r => r.attendance === filter);
+
+    if (filtered.length === 0) {
+      list.innerHTML = '<div class="empty-state"><span class="empty-icon">✦</span><p>No responses yet</p></div>';
+      return;
+    }
+
+    list.innerHTML = filtered.map(r => `
+      <div class="rsvp-row">
+        <div>
+          <div class="rsvp-name">${escHtml(r.name)}</div>
+          ${r.email ? `<div class="rsvp-meta" style="color:var(--gold-light);">✉️ ${escHtml(r.email)}</div>` : ''}
+          <div class="rsvp-meta">${escHtml(r.submitted_at)}</div>
+          ${r.notes ? `<div class="rsvp-notes">${escHtml(r.notes)}</div>` : ''}
+        </div>
+        <div class="rsvp-badge ${r.attendance}">${r.attendance === 'accepts' ? 'Attending' : 'Declining'}</div>
+      </div>
+    `).join('');
+  }
+
+  function escHtml(str) {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function exportCSV() {
+    if (allRsvps.length === 0) { alert('No RSVPs to export yet.'); return; }
+    const headers = ['#', 'Name', 'Email', 'Attendance', 'Notes', 'Submitted'];
+    const rows = allRsvps.map(r => [
+      r.id, `"${r.name}"`, `"${r.email || ''}"`, r.attendance === 'accepts' ? 'Attending' : 'Declining',
+      `"${r.notes || ''}"`, `"${r.submitted_at}"`
+    ]);
+    const csv = [headers, ...rows].map(r => r.join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = url;
+    a.download = 'rachel_chris_rsvps.csv'; a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  // Auto-refresh every 30 seconds
+  loadData();
+  setInterval(loadData, 30000);
+</script>
+
+</body>
+</html>
